@@ -10,11 +10,9 @@ import { errorHandler } from "./middleware/errorHandler";
 
 // Routes
 
-import authRoutes from "./routes/auth-route";
+import authRoutes from "./routes/auth-routes";
 
-dotenv.config({
-  path: "./env/.env.dev",
-});
+dotenv.config({ path: "../env/.env"});
 import "./models"; // Import the models and relationships
 
 const app = express();
