@@ -10,7 +10,7 @@ import { errorHandler } from "./middleware/errorHandler";
 
 // Routes
 
-import authRoutes from "./routes/auth-routes";
+import authRoutes from "./routes/auth-route";
 
 dotenv.config({ path: "../env/.env"});
 import "./models"; // Import the models and relationships
