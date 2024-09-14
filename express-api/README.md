@@ -115,23 +115,6 @@ Here is a summary of the available npm scripts:
 - **watch-test**: Runs tests in watch mode.
 - **watch**: Runs concurrent watchers for Sass, TypeScript, and Node.
 
-## Environment Variables
-
-- `DB_NAME`: Database name.
-- `DB_USER`: Database user.
-- `DB_PWD`: Database password.
-- `DB_HOST`: Database host.
-- `JWT_SECRET`: Secret key for JWT.
-- `JWT_REFRESH_SECRET`: Secret key for JWT refresh tokens.
-- `REDIS_URL`: Redis connection URL.
-- `REDIS_HOST`: Redis host.
-- `REDIS_PORT`: Redis port.
-- `AWS_ACCESS_KEY_ID`: AWS access key ID for S3.
-- `AWS_SECRET_ACCESS_KEY`: AWS secret access key for S3.
-- `AWS_REGION`: AWS region for S3.
-- `AWS_BUCKET_NAME`: AWS S3 bucket name.
-- `PORT`: Port for the server.
-
 ## Contributing
 
 If you want to contribute to the project, please fork the repository and submit a pull request with your changes. Ensure that all tests pass before submitting your pull request.
