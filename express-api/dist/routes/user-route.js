@@ -27,17 +27,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const authController = __importStar(require("../controllers/auth-controller"));
 const auth_middleware_1 = require("../middleware/auth-middleware");
-const auth_validators_1 = require("../middleware/validators/auth-validators");
+const role_middleware_1 = require("../middleware/role-middleware");
+const userController = __importStar(require("../controllers/user-controller"));
 const router = express_1.default.Router();
-router.get("/profile", auth_middleware_1.authenticateToken, authController.getProfile);
-router.post("/signup", auth_validators_1.validateSignup, authController.signup);
-router.post("/login", auth_validators_1.validateLogin, authController.login);
-router.get("/logout", auth_middleware_1.authenticateToken, authController.logout);
-router.get("/validate-token", auth_middleware_1.authenticateToken, authController.validateSession);
-router.get("/refresh-token", auth_middleware_1.authenticateToken, authController.refreshToken);
-router.post("/forgot-password", authController.forgotPassword);
-router.post("/reset-password/:token", authController.resetPassword);
-router.post("/change-password", auth_middleware_1.authenticateToken, authController.changePassword);
+// get all users with their roles
+router.get("/", auth_middleware_1.authenticateToken, (0, role_middleware_1.authorizeRoles)("superadmin", "admin"), userController.getUsers);
+// get roles of a user
+router.get("/:userId", auth_middleware_1.authenticateToken, (0, role_middleware_1.authorizeRoles)("superadmin", "admin"), userController.getUser);
+// add an user role by id
+router.post("/:userId/role", auth_middleware_1.authenticateToken, (0, role_middleware_1.authorizeRoles)("superadmin"), userController.addNewRoleToUser);
+// update user's (email and username) by id
+router.put("/:userId", auth_middleware_1.authenticateToken, (0, role_middleware_1.authorizeRoles)("superadmin"), userController.updateUser);
+// delete user by id
+router.delete("/:userId", auth_middleware_1.authenticateToken, (0, role_middleware_1.authorizeRoles)("superadmin"), userController.deleteUser);
 exports.default = router;

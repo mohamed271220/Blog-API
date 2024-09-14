@@ -46,23 +46,21 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         }
         const passwordHash = yield bcryptjs_1.default.hash(password, 12);
         const id = (0, uuid_1.v4)();
+        // Assign default role
+        const role = yield role_1.default.findOne({ where: { name: "user" } });
+        if (!role) {
+            throw new CustomError_1.CustomError("Role not found", 404);
+        }
         const savedUser = yield user_1.default.create({
             id,
             username,
             password: passwordHash,
             email,
         });
-        // Assign default role
-        const role = yield role_1.default.findOne({ where: { name: "User" } });
-        if (role) {
-            yield userRole_1.default.create({
-                userId: savedUser.id,
-                roleId: role.id,
-            });
-        }
-        if (!role) {
-            throw new CustomError_1.CustomError("Role not found", 404);
-        }
+        yield userRole_1.default.create({
+            userId: savedUser.id,
+            roleId: role.id,
+        });
         const token = (0, jwt_1.generateToken)({ id: savedUser.id, roles: [role.name] });
         const refreshToken = (0, jwt_1.generateRefreshToken)({ id: savedUser.id });
         res.cookie("auth_token", token, {

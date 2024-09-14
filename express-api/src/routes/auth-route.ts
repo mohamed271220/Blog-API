@@ -1,10 +1,10 @@
 import express from "express";
 import * as authController from "../controllers/auth-controller";
-import { authenticateToken } from "../middleware/authMiddleware";
+import { authenticateToken } from "../middleware/auth-middleware";
 import {
   validateLogin,
   validateSignup,
-} from "../middleware/validators/authValidators";
+} from "../middleware/validators/auth-validators";
 const router = express.Router();
 
 router.get("/profile", authenticateToken, authController.getProfile);
@@ -13,7 +13,7 @@ router.post("/signup", validateSignup, authController.signup);
 
 router.post("/login", validateLogin, authController.login);
 
-router.get("/logout", authController.logout);
+router.get("/logout", authenticateToken, authController.logout);
 
 router.get(
   "/validate-token",
@@ -21,7 +21,7 @@ router.get(
   authController.validateSession
 );
 
-router.get("/refresh-token", authController.refreshToken);
+router.get("/refresh-token", authenticateToken, authController.refreshToken);
 
 router.post("/forgot-password", authController.forgotPassword);
 

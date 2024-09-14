@@ -75,9 +75,19 @@ user_1.default.hasMany(vote_1.default, { foreignKey: "userId" });
 // A vote belongs to one User
 vote_1.default.belongsTo(user_1.default, { foreignKey: "userId" });
 // Role belongs to many Users through UserRole (Many-to-Many)
-role_1.default.belongsToMany(user_1.default, { through: userRole_1.default, foreignKey: "roleId" });
+role_1.default.belongsToMany(user_1.default, {
+    through: userRole_1.default,
+    foreignKey: "roleId",
+    otherKey: "userId",
+});
 // User belongs to many Roles through UserRole (Many-to-Many)
-user_1.default.belongsToMany(role_1.default, { through: userRole_1.default, foreignKey: "userId" });
+user_1.default.belongsToMany(role_1.default, {
+    through: userRole_1.default,
+    foreignKey: "userId",
+    otherKey: "roleId",
+});
+userRole_1.default.belongsTo(user_1.default, { foreignKey: "userId" });
+userRole_1.default.belongsTo(role_1.default, { foreignKey: "roleId" });
 // Sync models with database
 // This will create or alter tables as necessary based on the models
 database_1.default.sync({ alter: true }).then(() => {

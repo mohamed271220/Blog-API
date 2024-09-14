@@ -81,9 +81,20 @@ User.hasMany(Vote, { foreignKey: "userId" });
 Vote.belongsTo(User, { foreignKey: "userId" });
 
 // Role belongs to many Users through UserRole (Many-to-Many)
-Role.belongsToMany(User, { through: UserRole, foreignKey: "roleId" });
+Role.belongsToMany(User, {
+  through: UserRole,
+  foreignKey: "roleId",
+  otherKey: "userId",
+});
 // User belongs to many Roles through UserRole (Many-to-Many)
-User.belongsToMany(Role, { through: UserRole, foreignKey: "userId" });
+User.belongsToMany(Role, {
+  through: UserRole,
+  foreignKey: "userId",
+  otherKey: "roleId",
+});
+
+UserRole.belongsTo(User, { foreignKey: "userId" });
+UserRole.belongsTo(Role, { foreignKey: "roleId" });
 
 // Sync models with database
 // This will create or alter tables as necessary based on the models

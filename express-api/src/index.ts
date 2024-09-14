@@ -6,13 +6,16 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import swaggerRouter from "./config/swagger";
-import { errorHandler } from "./middleware/errorHandler";
+import { errorHandler } from "./middleware/error-handler";
 
 // Routes
 
+import uploadRoutes from "./routes/upload-route";
 import authRoutes from "./routes/auth-route";
+import roleRoutes from "./routes/role-route";
+import userRoutes from "./routes/user-route";
 
-dotenv.config({ path: "../env/.env"});
+dotenv.config();
 import "./models"; // Import the models and relationships
 
 const app = express();
@@ -42,7 +45,10 @@ dbConnection
   });
 
 // Routes
+app.use("/api/v1/media", uploadRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/roles", roleRoutes);
+app.use("/api/v1/users", userRoutes);
 
 app.use(errorHandler);
 

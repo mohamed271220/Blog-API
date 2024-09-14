@@ -47,25 +47,21 @@ export const signup = async (
     }
     const passwordHash = await bcrypt.hash(password, 12);
     const id = uuid();
+    // Assign default role
+    const role = await Role.findOne({ where: { name: "user" } });
+    if (!role) {
+      throw new CustomError("Role not found", 404);
+    }
     const savedUser = await User.create({
       id,
       username,
       password: passwordHash,
       email,
     });
-
-    // Assign default role
-    const role = await Role.findOne({ where: { name: "User" } });
-    if (role) {
-      await UserRole.create({
-        userId: savedUser.id,
-        roleId: role.id,
-      });
-    }
-
-    if (!role) {
-      throw new CustomError("Role not found", 404);
-    }
+    await UserRole.create({
+      userId: savedUser.id,
+      roleId: role.id,
+    });
 
     const token = generateToken({ id: savedUser.id, roles: [role.name] });
     const refreshToken = generateRefreshToken({ id: savedUser.id });

@@ -14,7 +14,7 @@ export function authorizeRoles(...allowedRoles: string[]) {
 
     // If user.roles is an array, check if any of the allowed roles match
     const userRoles = user.roles; // This should be an array if user can have multiple roles
-    if (!userRoles.some(role => allowedRoles.includes(role))) {
+    if (!userRoles.some((role) => allowedRoles.includes(role))) {
       return res.status(403).json({ message: "Forbidden" });
     }
 

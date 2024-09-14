@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
-import { handleValidationErrors } from "./reportErrors";
+import { handleValidationErrors } from "./report-errors";
 
 export const validateSignup = [
   body("username").notEmpty().withMessage("Username is required"),
