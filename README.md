@@ -38,10 +38,6 @@ The NestJS implementation is located in the `nestjs-api` directory.
 
 2. Configure environment variables. Create a `.env` file in the root directory of each implementation (`express` and `nestjs`) and add the following variables:
 
-   ```dotenv
-
-   ```
-
 - `DB_NAME`: Database name.
 - `DB_USER`: Database user.
 - `DB_PWD`: Database password.
@@ -57,9 +53,6 @@ The NestJS implementation is located in the `nestjs-api` directory.
 - `AWS_BUCKET_NAME`: AWS S3 bucket name.
 - `PORT`: Port for the server.
 
-  ```
-
-  ```
 
 ### Express
 

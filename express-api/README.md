@@ -32,10 +32,6 @@ This project is a blog API built with TypeScript. It includes a JWT authenticati
 
 3. Configure environment variables. Create a `.env` file in the root directory and add the following variables:
 
-   ```dotenv
-
-   ```
-
 - `DB_NAME`: Database name.
 - `DB_USER`: Database user.
 - `DB_PWD`: Database password.
@@ -51,9 +47,6 @@ This project is a blog API built with TypeScript. It includes a JWT authenticati
 - `AWS_BUCKET_NAME`: AWS S3 bucket name.
 - `PORT`: Port for the server.
 
-  ```
-
-  ```
 
 ## Usage
 
