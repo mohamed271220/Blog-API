@@ -1,4 +1,3 @@
-````markdown
 # Blog API
 
 ## Overview
@@ -24,7 +23,6 @@ This project is a blog API built with TypeScript. It includes a JWT authenticati
    git clone https://github.com/mohamed271220/Blog-API
    cd blog-api
    ```
-````
 
 2. Install dependencies:
 
@@ -52,6 +50,7 @@ This project is a blog API built with TypeScript. It includes a JWT authenticati
 - `AWS_REGION`: AWS region for S3.
 - `AWS_BUCKET_NAME`: AWS S3 bucket name.
 - `PORT`: Port for the server.
+
   ```
 
   ```

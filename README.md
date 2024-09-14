@@ -1,6 +1,3 @@
-Sure! Here's the updated `README.md` focused on the features without the detailed script information:
-
-````markdown
 # Blog API Project
 
 ## Overview
@@ -38,7 +35,6 @@ The NestJS implementation is located in the `nestjs-api` directory.
    git clone https://github.com/mohamed271220/Blog-API
    cd blog-api
    ```
-````
 
 2. Configure environment variables. Create a `.env` file in the root directory of each implementation (`express` and `nestjs`) and add the following variables:
 
@@ -60,6 +56,7 @@ The NestJS implementation is located in the `nestjs-api` directory.
 - `AWS_REGION`: AWS region for S3.
 - `AWS_BUCKET_NAME`: AWS S3 bucket name.
 - `PORT`: Port for the server.
+
   ```
 
   ```
