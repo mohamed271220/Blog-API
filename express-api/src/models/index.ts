@@ -11,6 +11,7 @@ import PostCategory from "./postCategory";
 import Role from "./role";
 import UserRole from "./userRole";
 import sequelize from "../config/database";
+import PostView from "./postView";
 
 // Initialize models
 export const models = {
@@ -95,6 +96,22 @@ User.belongsToMany(Role, {
 
 UserRole.belongsTo(User, { foreignKey: "userId" });
 UserRole.belongsTo(Role, { foreignKey: "roleId" });
+
+// User has many PostViews (One-to-Many)
+// A user can view many posts
+User.hasMany(PostView, { foreignKey: "userId" });
+// A post view belongs to one User
+PostView.belongsTo(User, { foreignKey: "userId" });
+
+// Post has many PostViews (One-to-Many)
+// A post can have many views
+Post.hasMany(PostView, { foreignKey: "postId" });
+// A post view belongs to one Post
+PostView.belongsTo(Post, { foreignKey: "postId" });
+
+// Post model
+Post.hasMany(MediaLink);
+
 
 // Sync models with database
 // This will create or alter tables as necessary based on the models

@@ -47,7 +47,12 @@ export const createRole = async (
   next: NextFunction
 ) => {
   try {
+    const { name } = req.body;
+    if (!name) {
+      return res.status(400).json({ message: "name is required" });
+    }
     const role = await roleService.createRole(req.body);
+
     res.status(201).json({ message: "role created successfully", role });
   } catch (error) {
     next(error);

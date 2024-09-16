@@ -2,6 +2,9 @@ import express from "express";
 import { authenticateToken } from "../middleware/auth-middleware";
 import { authorizeRoles } from "../middleware/role-middleware";
 import * as roleController from "../controllers/role-controller";
+import {
+  updateRoleValidators,
+} from "../middleware/validators/role-validators";
 
 const router = express.Router();
 
@@ -30,6 +33,7 @@ router.put(
   "/:roleId",
   authenticateToken,
   authorizeRoles("superadmin"),
+  updateRoleValidators,
   roleController.updateRole
 );
 

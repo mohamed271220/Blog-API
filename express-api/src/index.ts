@@ -14,6 +14,9 @@ import uploadRoutes from "./routes/upload-route";
 import authRoutes from "./routes/auth-route";
 import roleRoutes from "./routes/role-route";
 import userRoutes from "./routes/user-route";
+import postRoutes from "./routes/post-route";
+import categoryRoutes from "./routes/category-route";
+import tagRoutes from "./routes/tag-route";
 
 dotenv.config();
 import "./models"; // Import the models and relationships
@@ -49,6 +52,9 @@ app.use("/api/v1/media", uploadRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/roles", roleRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/categories", categoryRoutes);
+app.use("/api/v1/tags", tagRoutes);
 
 app.use(errorHandler);
 
