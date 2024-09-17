@@ -94,6 +94,7 @@ export class PostService {
           { transaction }
         );
       }
+      console.log(data.mediaLinks);
 
       // Associate media links with the post if provided
       if (data.mediaLinks && data.mediaLinks.length > 0) {
@@ -209,7 +210,13 @@ export class PostService {
     return { posts, pagination };
   }
 
-  async getPostById(postId: string) {
+  async getPostById(postId: string, userId: string | null) {
+    await this.postViewRepository.create({
+      id: uuid(),
+      postId,
+      userId,
+      viewedAt: new Date(),
+    });
     const post = await this.postRepository.findByPk(postId, {
       include: [
         {

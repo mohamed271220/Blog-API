@@ -10,6 +10,7 @@ import {
     InferAttributes<Post>,
     InferCreationAttributes<Post>
   > {
+    [x: string]: any;
     declare id: string;
     declare authorId: string;
     declare title: string;

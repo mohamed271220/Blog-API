@@ -109,9 +109,9 @@ Post.hasMany(PostView, { foreignKey: "postId" });
 // A post view belongs to one Post
 PostView.belongsTo(Post, { foreignKey: "postId" });
 
-// Post model
-Post.hasMany(MediaLink);
-
+// Self-referential associations
+Comment.hasMany(Comment, { as: "replies", foreignKey: "parentId" });
+Comment.belongsTo(Comment, { as: "parent", foreignKey: "parentId" });
 
 // Sync models with database
 // This will create or alter tables as necessary based on the models

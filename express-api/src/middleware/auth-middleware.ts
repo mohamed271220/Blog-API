@@ -26,3 +26,26 @@ export function authenticateToken(
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export function optionalAuthenticateToken(
+  req: userRequest,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const token = req.cookies.auth_token;
+
+    if (!token) return next();
+
+    const user = verifyToken(token);
+    if (!user) return next();
+    req.user = {
+      id: user.id,
+      roles: user.roles.map((role) => role.toLocaleLowerCase()),
+    };
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}

@@ -1,5 +1,8 @@
 import express from "express";
-import { authenticateToken } from "../middleware/auth-middleware";
+import {
+  authenticateToken,
+  optionalAuthenticateToken,
+} from "../middleware/auth-middleware";
 import { authorizeRoles } from "../middleware/role-middleware";
 import {
   createPost,
@@ -35,7 +38,7 @@ router.get("/", getAllPosts);
 router.get("/feed", authenticateToken, authorizeRoles("user"), getFeed);
 
 // get post by id
-router.get("/:postId", getPostById);
+router.get("/:postId", optionalAuthenticateToken, getPostById);
 
 // get posts by category
 router.get("/category/:categoryId", getPostsByCategory);

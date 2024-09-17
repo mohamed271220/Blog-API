@@ -73,13 +73,14 @@ export const getFeed = async (
 };
 
 export const getPostById = async (
-  req: Request,
+  req: userRequest,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { postId } = req.params;
-    const post = await postService.getPostById(postId);
+    const userId = req.user ? req.user.id : null;
+    const post = await postService.getPostById(postId, userId);
     res.status(200).json({ message: "fetched post successfully", post });
   } catch (error) {
     next(error);

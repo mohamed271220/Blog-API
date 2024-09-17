@@ -13,7 +13,6 @@ export const createPostValidators = [
     .withMessage("Content must be a string")
     .notEmpty()
     .withMessage("Content is required"),
-  body("authorId").isUUID().withMessage("Invalid author ID"),
   body("tags")
     .optional()
     .isArray()
@@ -44,7 +43,6 @@ export const updatePostValidators = [
   param("postId").isUUID().withMessage("Invalid post ID"),
   body("title").optional().isString().withMessage("Title must be a string"),
   body("content").optional().isString().withMessage("Content must be a string"),
-  body("authorId").isUUID().withMessage("Invalid author ID"),
   body("tags")
     .optional()
     .isArray()

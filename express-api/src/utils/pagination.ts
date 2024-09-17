@@ -1,5 +1,3 @@
-// src/utils/pagination.ts
-
 export interface Pagination {
   totalItems: number;
   itemsPerPage: number;

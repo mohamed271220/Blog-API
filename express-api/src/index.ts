@@ -17,6 +17,7 @@ import userRoutes from "./routes/user-route";
 import postRoutes from "./routes/post-route";
 import categoryRoutes from "./routes/category-route";
 import tagRoutes from "./routes/tag-route";
+import commentRoutes from "./routes/comment-route";
 
 dotenv.config();
 import "./models"; // Import the models and relationships
@@ -55,6 +56,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/tags", tagRoutes);
+app.use("/api/v1/comments", commentRoutes);
 
 app.use(errorHandler);
 

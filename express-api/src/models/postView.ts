@@ -11,7 +11,7 @@ class PostView extends Model<
   InferCreationAttributes<PostView>
 > {
   declare id: string;
-  declare userId: string;
+  declare userId: string | null;
   declare postId: string;
   declare viewedAt: Date;
 }
