@@ -1,0 +1,430 @@
+openapi: 3.0.0
+
+info:
+  title: Posts API
+  description: API for managing posts, including creating, updating, deleting, and fetching posts by various criteria.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/v1/posts:
+    post:
+      summary: Create a new post
+      description: Allows authenticated users to create a new post with the provided details.
+      tags: [Posts]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the post.
+                content:
+                  type: string
+                  description: The content of the post.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: The tags associated with the post.
+                categories:
+                  type: array
+                  items:
+                    type: string
+                  description: The categories associated with the post.
+                mediaLinks:
+                  type: array
+                  items:
+                    type: string
+                  description: Media links (e.g., images) associated with the post.
+      responses:
+        '201':
+          description: Post created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "post created successfully"
+                  post:
+                    type: object
+                    description: The created post object.
+        '401':
+          description: Unauthorized.
+
+    get:
+      summary: Get all posts
+      description: Fetches all posts with optional pagination and search.
+      tags: [Posts]
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          description: Number of posts to return.
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          description: Number of posts to skip for pagination.
+          schema:
+            type: integer
+        - in: query
+          name: search
+          required: false
+          description: Search term to filter posts by title.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched posts successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched posts successfully"
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '500':
+          description: Internal server error.
+
+  /api/v1/posts/feed:
+    get:
+      summary: Get user feed
+      description: Fetches a personalized feed of posts for the authenticated user based on their interactions.
+      tags: [Posts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          description: Number of posts to return.
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          description: Number of posts to skip for pagination.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Fetched feed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched feed successfully"
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          description: Unauthorized.
+
+  /api/v1/posts/{postId}:
+    get:
+      summary: Get post by ID
+      description: Fetches a specific post by its ID, optionally including user interaction data.
+      tags: [Posts]
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          description: The ID of the post to fetch.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched post successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched post successfully"
+                  post:
+                    type: object
+        '404':
+          description: Post not found.
+
+    put:
+      summary: Update post by ID
+      description: Allows authenticated users to update an existing post.
+      tags: [Posts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          description: The ID of the post to update.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Updated title of the post.
+                content:
+                  type: string
+                  description: Updated content of the post.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Updated tags for the post.
+                categories:
+                  type: array
+                  items:
+                    type: string
+                  description: Updated categories for the post.
+                mediaLinks:
+                  type: array
+                  items:
+                    type: string
+                  description: Updated media links for the post.
+      responses:
+        '200':
+          description: Post updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "post updated successfully"
+                  post:
+                    type: object
+        '401':
+          description: Unauthorized.
+        '404':
+          description: Post not found.
+
+    delete:
+      summary: Delete post by ID
+      description: Allows authenticated users to delete a post by its ID.
+      tags: [Posts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          description: The ID of the post to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Post deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "post deleted successfully"
+        '401':
+          description: Unauthorized.
+        '404':
+          description: Post not found.
+
+  /api/v1/posts/category/{categoryId}:
+    get:
+      summary: Get posts by category
+      description: Fetches all posts associated with a specific category.
+      tags: [Posts]
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          description: The ID of the category to fetch posts from.
+          schema:
+            type: string
+        - in: query
+          name: limit
+          required: false
+          description: Number of posts to return.
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          description: Number of posts to skip for pagination.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Fetched posts successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched posts successfully"
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '404':
+          description: Category not found.
+
+  /api/v1/posts/tag/{tagId}:
+    get:
+      summary: Get posts by tag
+      description: Fetches all posts associated with a specific tag.
+      tags: [Posts]
+      parameters:
+        - in: path
+          name: tagId
+          required: true
+          description: The ID of the tag to fetch posts from.
+          schema:
+            type: string
+        - in: query
+          name: limit
+          required: false
+          description: Number of posts to return.
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          description: Number of posts to skip for pagination.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Fetched posts successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched posts successfully"
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '404':
+          description: Tag not found.
+
+  /api/v1/posts/author/{authorId}:
+    get:
+      summary: Get posts by author
+      description: Fetches all posts created by a specific author.
+      tags: [Posts]
+      parameters:
+        - in: path
+          name: authorId
+          required: true
+          description: The ID of the author to fetch posts from.
+          schema:
+            type: string
+        - in: query
+          name: limit
+          required: false
+          description: Number of posts to return.
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          description: Number of posts to skip for pagination.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Fetched posts successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched posts successfully"
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '404':
+          description: Author not found.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: The total number of views available.
+        itemsPerPage:
+          type: integer
+          description: The number of views returned per page.
+        currentPage:
+          type: integer
+          description: The current page number.
+        totalPages:
+          type: integer
+          description: The total number of pages.
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is a next page.
+        hasPreviousPage:
+          type: boolean
+          description: Indicates if there is a previous page.
+        nextPage:
+          type: integer
+          nullable: true
+          description: The page number of the next page, or null if there is none.
+        previousPage:
+          type: integer
+          nullable: true
+          description: The page number of the previous page, or null if there is none.

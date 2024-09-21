@@ -1,0 +1,267 @@
+openapi: 3.0.0
+info:
+  title: User Management API
+  description: API for managing users and their roles
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/v1/users:
+    get:
+      tags:
+        - Users
+      summary: Get all users with their roles
+      description: This endpoint allows a superadmin or admin to fetch all users along with their roles.
+      operationId: getUsers
+      parameters:
+        - name: limit
+          in: query
+          description: Number of items to return
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          description: Number of items to skip before starting to collect the result set
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: search
+          in: query
+          description: Search term to filter users by username or email
+          required: false
+          schema:
+            type: string
+            example: admin
+      responses:
+        '200':
+          description: Fetched users successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: fetched users successfully
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        username:
+                          type: string
+                        email:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+        - admin
+
+  /api/v1/users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Get roles of a user
+      description: This endpoint allows a superadmin or admin to fetch a user's roles by their ID.
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to fetch
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched user successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: fetched user successfully
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      username:
+                        type: string
+                      email:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+        - admin
+
+    put:
+      tags:
+        - Users
+      summary: Update user's email and username by ID
+      description: This endpoint allows a superadmin to update a user's email and username by their ID.
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to update
+          schema:
+            type: string
+      requestBody:
+        description: User object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: admin
+                email:
+                  type: string
+                  example: admin@example.com
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User updated
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user by ID
+      description: This endpoint allows a superadmin to delete a user by their ID.
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User deleted
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+
+  /api/v1/users/{userId}/role:
+    post:
+      tags:
+        - Users
+      summary: Add a new role to a user by ID
+      description: This endpoint allows a superadmin to add a new role to a user by their ID.
+      operationId: addNewRoleToUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to update
+          schema:
+            type: string
+      requestBody:
+        description: Role object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleId:
+                  type: string
+                  example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        '200':
+          description: User role updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User role updated
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: The total number of views available.
+        itemsPerPage:
+          type: integer
+          description: The number of views returned per page.
+        currentPage:
+          type: integer
+          description: The current page number.
+        totalPages:
+          type: integer
+          description: The total number of pages.
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is a next page.
+        hasPreviousPage:
+          type: boolean
+          description: Indicates if there is a previous page.
+        nextPage:
+          type: integer
+          nullable: true
+          description: The page number of the next page, or null if there is none.
+        previousPage:
+          type: integer
+          nullable: true
+          description: The page number of the previous page, or null if there is none.

@@ -9,6 +9,7 @@ import {
   updateCategory,
 } from "../controllers/category-controller";
 
+// /api/v1/categories
 const router = express.Router();
 
 // add a new category

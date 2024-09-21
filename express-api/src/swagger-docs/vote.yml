@@ -1,0 +1,483 @@
+openapi: 3.0.0
+info:
+  title: Votes API
+  version: 1.0.0
+  description: |
+    API for managing votes on posts, including creating, deleting, and retrieving votes by various criteria such as post ID, user ID, category ID, and tag ID.
+
+servers:
+  - url: http://localhost:3000
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/v1/votes/post/{postId}:
+    post:
+      summary: Create a Vote
+      description: |
+        Allows authenticated users with the "user" role to create a vote (upvote or downvote) on a specific post.
+      tags:
+        - Votes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post to vote on.
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        description: |
+          The type of vote to create. Must be either "upvote" or "downvote".
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: The type of vote.
+                  enum: [upvote, downvote]
+                  example: upvote
+              required:
+                - type
+      responses:
+        '201':
+          description: Vote created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "vote created successfully"
+                  vote:
+                    $ref: '#/components/schemas/Vote'
+        '400':
+          description: Bad request due to missing or invalid vote type.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "type is required"
+        '401':
+          description: Unauthorized - User not found or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+        '404':
+          description: Post or User not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post or User not found"
+
+    get:
+      summary: Get Votes by Post ID
+      description: |
+        Retrieves all votes for a specific post by its ID, including upvotes, downvotes, total votes, and their respective ratios. Supports pagination through query parameters.
+      tags:
+        - Votes
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post for which to retrieve votes.
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+        - name: limit
+          in: query
+          required: false
+          description: The maximum number of vote records to return.
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          required: false
+          description: The number of vote records to skip before starting to collect the result set.
+          schema:
+            type: integer
+            example: 0
+      responses:
+        '200':
+          description: Fetched votes successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched votes successfully"
+                  upvotes:
+                    type: integer
+                    example: 25
+                  downvotes:
+                    type: integer
+                    example: 5
+                  totalVotes:
+                    type: integer
+                    example: 30
+                  upvoteRatio:
+                    type: number
+                    format: float
+                    example: 0.83
+                  downvoteRatio:
+                    type: number
+                    format: float
+                    example: 0.17
+        '404':
+          description: Post not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post not found"
+
+  /api/v1/votes/{voteId}:
+    delete:
+      summary: Remove a Vote
+      description: |
+        Allows authenticated users with the "user" role to remove a specific vote by its ID. This is a permanent delete.
+      tags:
+        - Votes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: voteId
+          in: path
+          required: true
+          description: The ID of the vote to remove.
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Vote removed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "vote removed successfully"
+        '401':
+          description: Unauthorized - User not found or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+        '404':
+          description: Vote not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Vote not found"
+
+  /api/v1/votes/user:
+    get:
+      summary: Get Votes by User ID
+      description: |
+        Retrieves all votes associated with the authenticated user. Only accessible to users with the "user" role. Supports pagination through query parameters.
+      tags:
+        - Votes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: The maximum number of vote records to return.
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          required: false
+          description: The number of vote records to skip before starting to collect the result set.
+          schema:
+            type: integer
+            example: 0
+      responses:
+        '200':
+          description: Fetched votes successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched votes successfully"
+                  votes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vote'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          description: Unauthorized - User not found or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+        '404':
+          description: Votes not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Votes not found"
+
+  /api/v1/votes/category/{categoryId}:
+    get:
+      summary: Get Votes by Category ID
+      description: |
+        Retrieves all votes for posts under a specific category. Only accessible to users with the "admin" role. Supports pagination through query parameters.
+      tags:
+        - Votes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: The ID of the category for which to retrieve votes.
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+        - name: limit
+          in: query
+          required: false
+          description: The maximum number of vote records to return.
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          required: false
+          description: The number of vote records to skip before starting to collect the result set.
+          schema:
+            type: integer
+            example: 0
+      responses:
+        '200':
+          description: Fetched votes successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched votes successfully"
+                  votes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vote'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          description: Unauthorized - User not found or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+        '404':
+          description: Category not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Category not found"
+
+  /api/v1/votes/tag/{tagId}:
+    get:
+      summary: Get Votes by Tag ID
+      description: |
+        Retrieves all votes for posts associated with a specific tag. Only accessible to users with the "admin" role. Supports pagination through query parameters.
+      tags:
+        - Votes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          description: The ID of the tag for which to retrieve votes.
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+        - name: limit
+          in: query
+          required: false
+          description: The maximum number of vote records to return.
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          required: false
+          description: The number of vote records to skip before starting to collect the result set.
+          schema:
+            type: integer
+            example: 0
+      responses:
+        '200':
+          description: Fetched votes successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched votes successfully"
+                  votes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vote'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          description: Unauthorized - User not found or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+        '404':
+          description: Tag not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Tag not found"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Vote:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the vote.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        postId:
+          type: string
+          description: The ID of the post that was voted on.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        userId:
+          type: string
+          description: The ID of the user who cast the vote.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        type:
+          type: string
+          description: The type of vote, either "upvote" or "downvote".
+          enum: [upvote, downvote]
+          example: upvote
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the vote was created.
+          example: "2024-04-27T14:20:30Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the vote was last updated.
+          example: "2024-04-27T14:20:30Z"
+
+    Pagination:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: The total number of items available.
+          example: 100
+        itemsPerPage:
+          type: integer
+          description: The number of items returned per page.
+          example: 10
+        currentPage:
+          type: integer
+          description: The current page number.
+          example: 1
+        totalPages:
+          type: integer
+          description: The total number of pages available.
+          example: 10
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is a next page available.
+          example: true
+        hasPreviousPage:
+          type: boolean
+          description: Indicates if there is a previous page available.
+          example: false
+        nextPage:
+          type: integer
+          nullable: true
+          description: The page number of the next page, or null if there is none.
+          example: 2
+        previousPage:
+          type: integer
+          nullable: true
+          description: The page number of the previous page, or null if there is none.
+          example: null

@@ -1,0 +1,201 @@
+openapi: 3.0.0
+
+info:
+  title: Comment API
+  version: 1.0.0
+  description: API for managing comments on posts.
+
+servers:
+  - url: http://localhost:3000
+
+
+paths:
+  /api/v1/comments/post/{postId}:
+    post:
+      summary: Add a new comment to a post
+      tags:
+        - Comments
+      description: Allows authenticated users to create a new comment for a specific post.
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post to which the comment belongs.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: The content of the comment.
+                parentId:
+                  type: string
+                  description: Optional ID of the parent comment for threaded replies.
+      responses:
+        '201':
+          description: Comment created successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Post not found
+
+  /api/v1/comments/post/{postId}/top-level:
+    get:
+      summary: Get top-level comments of a post
+      tags:
+        - Comments
+      description: Retrieves all top-level comments for a specified post.
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post for which to retrieve comments.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched comments successfully
+        '404':
+          description: Post not found
+
+  /api/v1/comments/post/{postId}/tree:
+    get:
+      summary: Get the entire comment tree of a post
+      tags:
+        - Comments
+      description: Retrieves a hierarchical structure of all comments for a specified post.
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post for which to retrieve the comment tree.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched comment tree successfully
+        '404':
+          description: Post not found
+
+  /api/v1/comments/{commentId}:
+    get:
+      summary: Get replies of a specific comment
+      tags:
+        - Comments
+      description: Retrieves a specific comment by its ID.
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: The ID of the comment to retrieve.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched comment successfully
+        '404':
+          description: Comment not found
+
+    put:
+      summary: Update a comment by its ID
+      tags:
+        - Comments
+      description: Allows authenticated users to update the content of a specific comment.
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: The ID of the comment to update.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: The new content of the comment.
+      responses:
+        '200':
+          description: Comment updated successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Comment not found
+
+    delete:
+      summary: Delete a comment by its ID (soft delete)
+      tags:
+        - Comments
+      description: Allows authenticated users to delete a comment by its ID. This is a soft delete.
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: The ID of the comment to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Comment not found
+
+  /api/v1/comments/post/{postId}/tree/deleted:
+    get:
+      summary: Get all comments including deleted ones
+      tags:
+        - Comments
+      description: Retrieves all comments, including deleted ones, for a specified post.
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post for which to retrieve all comments.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched comments successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Post not found
+
+  /api/v1/comments/{commentId}/deleted:
+    get:
+      summary: Get a comment by ID including deleted ones
+      tags:
+        - Comments
+      description: Retrieves a specific comment by its ID, including its deleted version if applicable.
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: The ID of the comment to retrieve.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched comment successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Comment not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

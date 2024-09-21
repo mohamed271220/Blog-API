@@ -20,6 +20,7 @@ import {
   updatePostValidators,
 } from "../middleware/validators/post-validators";
 
+// /api/v1/posts
 const router = express.Router();
 
 // add a new post

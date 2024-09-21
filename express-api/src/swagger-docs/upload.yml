@@ -1,0 +1,61 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Media Upload API
+  description: API for uploading media files
+servers:
+  - url: http://localhost:3000
+    description: Local server
+
+paths:
+  /api/v1/media/upload:
+    post:
+      tags:
+        - Media
+      summary: Upload media files
+      description: Upload multiple media files (up to 40).
+      operationId: uploadFiles
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photos:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Files uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  description: URL of the uploaded file
+        '400':
+          description: No files uploaded
+          content:
+            application/json:
+              schema:
+                type: string
+                example: No files uploaded.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Unauthorized
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

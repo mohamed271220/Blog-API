@@ -5,11 +5,11 @@ import helmet from "helmet";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import swaggerRouter from "./config/swagger";
 import { errorHandler } from "./middleware/error-handler";
 
 // Routes
 
+import swaggerRouter from "./config/swagger";
 import uploadRoutes from "./routes/upload-route";
 import authRoutes from "./routes/auth-route";
 import roleRoutes from "./routes/role-route";
@@ -18,6 +18,8 @@ import postRoutes from "./routes/post-route";
 import categoryRoutes from "./routes/category-route";
 import tagRoutes from "./routes/tag-route";
 import commentRoutes from "./routes/comment-route";
+import postViewsRoutes from "./routes/post-views-route";
+import voteRoutes from "./routes/vote-route";
 
 dotenv.config();
 import "./models"; // Import the models and relationships
@@ -57,11 +59,13 @@ app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/tags", tagRoutes);
 app.use("/api/v1/comments", commentRoutes);
+app.use("/api/v1/post-views", postViewsRoutes);
+app.use("/api/v1/votes", voteRoutes);
 
 app.use(errorHandler);
 
 // Swagger docs route
-// app.use("/api/v1/official-docs/express-api-docs", swaggerRouter);
+app.use("/api/v1/official-docs/express-api-docs", swaggerRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

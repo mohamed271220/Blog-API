@@ -8,7 +8,7 @@ import {
   getTagById,
   updateTag,
 } from "../controllers/tag-controller";
-
+// /api/v1/tags
 const router = express.Router();
 
 // add a new tag

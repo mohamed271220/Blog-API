@@ -2,7 +2,7 @@ import express from "express";
 import { authenticateToken } from "../middleware/auth-middleware";
 import { authorizeRoles } from "../middleware/role-middleware";
 import * as userController from "../controllers/user-controller";
-
+// /api/v1/users
 const router = express.Router();
 
 // get all users with their roles

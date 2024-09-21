@@ -60,6 +60,9 @@ Post.belongsToMany(Tag, { through: PostTag, foreignKey: "postId" });
 // A tag can belong to many posts
 Tag.belongsToMany(Post, { through: PostTag, foreignKey: "tagId" });
 
+PostTag.belongsTo(Post, { foreignKey: "postId" });
+PostTag.belongsTo(Tag, { foreignKey: "tagId" });
+
 // Post belongs to many Categories through PostCategory (Many-to-Many)
 // A post can belong to many categories
 Post.belongsToMany(Category, { through: PostCategory, foreignKey: "postId" });
@@ -68,6 +71,10 @@ Category.belongsToMany(Post, {
   through: PostCategory,
   foreignKey: "categoryId",
 });
+
+PostCategory.belongsTo(Post, { foreignKey: "postId" });
+
+PostCategory.belongsTo(Category, { foreignKey: "categoryId" });
 
 // Post has many Votes (One-to-Many)
 // A post can have many votes

@@ -1,0 +1,234 @@
+openapi: 3.0.0
+info:
+  title: Post Views API
+  version: 1.0.0
+  description: API for managing and retrieving post view statistics.
+
+servers:
+  - url: http://localhost:3000
+
+
+paths:
+  /api/v1/post-views/post/{postId}:
+    get:
+      summary: Get Views by Post ID
+      tags:
+        - post views
+      description: Retrieve all views for a specific post by its ID. Optionally supports pagination using query parameters for limit and offset.
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post for which to retrieve views.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: The maximum number of views to return.
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: false
+          description: The number of views to skip before starting to collect the result set.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Fetched views successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  views:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostView'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '404':
+          description: Post not found
+
+  /api/v1/post-views/user:
+    get:
+      summary: Get Views by User ID
+      tags:
+        - post views
+      description: Retrieve all views associated with the authenticated user. Only accessible to users with the "user" role. Supports pagination using limit and offset query parameters.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Fetched views successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  views:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostView'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+
+  /api/v1/post-views/category/{categoryId}:
+    get:
+      summary: Get Views by Category ID
+      tags:
+        - post views
+      description: Retrieve all views for posts under a specific category. Only accessible to users with the "admin" role. Supports pagination using limit and offset query parameters.
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: The ID of the category for which to retrieve views.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: The maximum number of views to return.
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: false
+          description: The number of views to skip before starting to collect the result set.
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Fetched views successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  views:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostView'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Category not found
+
+  /api/v1/post-views/tag/{tagId}:
+    get:
+      summary: Get Views by Tag ID
+      tags:
+        - post views
+      description: Retrieve all views for posts associated with a specific tag. Only accessible to users with the "admin" role. Supports pagination using limit and offset query parameters.
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          description: The ID of the tag for which to retrieve views.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: The maximum number of views to return.
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: false
+          description: The number of views to skip before starting to collect the result set.
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Fetched views successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  views:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostView'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Tag not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    PostView:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the view record.
+        postId:
+          type: string
+          description: The ID of the post being viewed.
+        userId:
+          type: string
+          description: The ID of the user who viewed the post.
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the view was recorded.
+
+    Pagination:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: The total number of views available.
+        itemsPerPage:
+          type: integer
+          description: The number of views returned per page.
+        currentPage:
+          type: integer
+          description: The current page number.
+        totalPages:
+          type: integer
+          description: The total number of pages.
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is a next page.
+        hasPreviousPage:
+          type: boolean
+          description: Indicates if there is a previous page.
+        nextPage:
+          type: integer
+          nullable: true
+          description: The page number of the next page, or null if there is none.
+        previousPage:
+          type: integer
+          nullable: true
+          description: The page number of the previous page, or null if there is none.

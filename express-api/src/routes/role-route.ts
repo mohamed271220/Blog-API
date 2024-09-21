@@ -6,6 +6,7 @@ import {
   updateRoleValidators,
 } from "../middleware/validators/role-validators";
 
+// /api/v1/roles
 const router = express.Router();
 
 router.post(

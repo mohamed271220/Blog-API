@@ -1,0 +1,159 @@
+openapi: 3.0.0
+info:
+  title: Role Management API
+  description: API for managing roles
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/v1/roles:
+    post:
+      tags:
+        - Roles
+      summary: Create a new role
+      description: This endpoint allows a superadmin to create a new role.
+      operationId: createRole
+      requestBody:
+        description: Role object that needs to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin
+      responses:
+        '201':
+          description: Role created successfully
+        '400':
+          description: Name is required
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+
+    get:
+      tags:
+        - Roles
+      summary: Get all roles
+      description: This endpoint allows a superadmin or admin to fetch all roles.
+      operationId: getRoles
+      parameters:
+        - name: limit
+          in: query
+          description: Number of items to return
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          description: Number of items to skip before starting to collect the result set
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: search
+          in: query
+          description: Search term to filter roles by name
+          required: false
+          schema:
+            type: string
+            example: admin
+      responses:
+        '200':
+          description: Fetched roles successfully
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+        - admin
+
+  /api/v1/roles/{roleId}:
+    get:
+      tags:
+        - Roles
+      summary: Get a role by ID
+      description: This endpoint allows a superadmin or admin to fetch a role by its ID.
+      operationId: getRole
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: ID of the role to fetch
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched role successfully
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+        - admin
+
+    put:
+      tags:
+        - Roles
+      summary: Update a role by ID
+      description: This endpoint allows a superadmin to update a role by its ID.
+      operationId: updateRole
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: ID of the role to update
+          schema:
+            type: string
+      requestBody:
+        description: Role object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin
+      responses:
+        '200':
+          description: Role updated successfully
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+
+    delete:
+      tags:
+        - Roles
+      summary: Delete a role by ID
+      description: This endpoint allows a superadmin to delete a role by its ID.
+      operationId: deleteRole
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: ID of the role to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Role deleted successfully
+      security:
+        - bearerAuth: []
+      x-roles:
+        - superadmin
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:

@@ -58,6 +58,12 @@ Vote.init(
   },
   {
     sequelize,
+    indexes: [
+      {
+        unique: true,
+        fields: ["postId", "userId"],
+      },
+    ],
     modelName: "Vote",
     tableName: "votes",
     timestamps: true,

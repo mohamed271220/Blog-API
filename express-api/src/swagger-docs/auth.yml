@@ -1,0 +1,175 @@
+openapi: 3.0.0
+info:
+  title: Auth API
+  version: 1.0.0
+  description: API for user authentication and authorization
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/v1/auth/profile:
+    get:
+      summary: Get user profile
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile retrieved successfully
+        '404':
+          description: User not found
+  /api/v1/auth/signup:
+    post:
+      summary: User signup
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          description: User already exists
+  /api/v1/auth/login:
+    post:
+      summary: User login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Invalid credentials
+  /api/v1/auth/logout:
+    get:
+      summary: User logout
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout successful
+  /api/v1/auth/validate-token:
+    get:
+      summary: Validate user token
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Token validated successfully
+        '400':
+          description: Invalid token
+  /api/v1/auth/refresh-token:
+    get:
+      summary: Refresh user token
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Token refreshed successfully
+        '400':
+          description: Invalid token
+  /api/v1/auth/forgot-password:
+    post:
+      summary: Forgot password
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Password reset email sent
+        '404':
+          description: User not found
+  /api/v1/auth/reset-password/{token}:
+    post:
+      summary: Reset password
+      tags:
+        - Auth
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Password has been reset
+        '400':
+          description: Invalid or expired token
+  /api/v1/auth/change-password:
+    post:
+      summary: Change password
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        '200':
+          description: Password has been changed
+        '400':
+          description: Invalid password
+        '404':
+          description: User not found
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

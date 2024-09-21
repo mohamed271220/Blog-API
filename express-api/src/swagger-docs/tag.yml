@@ -1,0 +1,226 @@
+openapi: 3.0.0
+info:
+  title: Tags API
+  description: API for managing tags, including creating, updating, deleting, and fetching tags.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/v1/tags:
+    post:
+      summary: Create a new tag
+      description: Allows authenticated users with appropriate roles (superadmin or admin) to create a new tag.
+      tags: [Tags]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the tag.
+      responses:
+        '201':
+          description: Tag created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "tag created successfully"
+                  tag:
+                    type: object
+                    description: The created tag object.
+        '400':
+          description: Bad request due to missing name field.
+        '401':
+          description: Unauthorized.
+        '403':
+          description: Forbidden - user lacks required role.
+
+    get:
+      summary: Get all tags
+      description: Fetches all tags with optional pagination.
+      tags: [Tags]
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          description: Number of tags to return.
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          description: Number of tags to skip for pagination.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Fetched tags successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched tags successfully"
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '500':
+          description: Internal server error.
+
+  /api/v1/tags/{tagId}:
+    get:
+      summary: Get tag by ID
+      description: Fetches a specific tag by its ID.
+      tags: [Tags]
+      parameters:
+        - in: path
+          name: tagId
+          required: true
+          description: The ID of the tag to fetch.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fetched tag successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "fetched tag successfully"
+                  tag:
+                    type: object
+        '404':
+          description: Tag not found.
+
+    put:
+      summary: Update tag by ID
+      description: Allows authenticated users with appropriate roles (superadmin or admin) to update an existing tag.
+      tags: [Tags]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: tagId
+          required: true
+          description: The ID of the tag to update.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Updated name of the tag.
+      responses:
+        '200':
+          description: Tag updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "tag updated successfully"
+                  tag:
+                    type: object
+        '400':
+          description: Bad request due to missing name field.
+        '401':
+          description: Unauthorized.
+        '403':
+          description: Forbidden - user lacks required role.
+        '404':
+          description: Tag not found.
+
+    delete:
+      summary: Delete tag by ID
+      description: Allows authenticated users with the role of superadmin to delete a tag by its ID.
+      tags: [Tags]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: tagId
+          required: true
+          description: The ID of the tag to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tag deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "tag deleted successfully"
+        '401':
+          description: Unauthorized.
+        '403':
+          description: Forbidden - user lacks required role.
+        '404':
+          description: Tag not found.
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: The total number of views available.
+        itemsPerPage:
+          type: integer
+          description: The number of views returned per page.
+        currentPage:
+          type: integer
+          description: The current page number.
+        totalPages:
+          type: integer
+          description: The total number of pages.
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is a next page.
+        hasPreviousPage:
+          type: boolean
+          description: Indicates if there is a previous page.
+        nextPage:
+          type: integer
+          nullable: true
+          description: The page number of the next page, or null if there is none.
+        previousPage:
+          type: integer
+          nullable: true
+          description: The page number of the previous page, or null if there is none.

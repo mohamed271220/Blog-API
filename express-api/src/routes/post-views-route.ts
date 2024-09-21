@@ -1,15 +1,22 @@
 import express from "express";
 import { authenticateToken } from "../middleware/auth-middleware";
 import { authorizeRoles } from "../middleware/role-middleware";
+import {
+  getViewsByCategoryId,
+  getViewsByPostId,
+  getViewsByTagId,
+  getViewsByUserId,
+} from "../controllers/post-views-controller";
 
+// /api/v1/post-views
 const router = express.Router();
 
 // Get Views by Post ID
-router.get("/:postId", getViewsByPostId);
+router.get("/post/:postId", getViewsByPostId);
 
 // Get Views by User ID
 router.get(
-  "/user/:userId",
+  "/user",
   authenticateToken,
   authorizeRoles("user"),
   getViewsByUserId
