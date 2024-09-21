@@ -2,13 +2,13 @@
 
 ## Overview
 
-This repository contains two implementations of a blog API: one using Express and the other using NestJS. Both implementations include a JWT authentication system with token management, role-based authorization, media upload to an S3 bucket, upvote and downvote functionality for posts, comment threads on posts, posts views tracking, and management of post categories and tags.
+This repository contains two implementations of a blog API: one using Express and the other using NestJS. Both implementations include a JWT authentication system with token management, role-based authorization, media upload to a S3 bucket, upvote and downvote functionality for posts, comment threads on posts, posts views tracking, and management of post categories and tags.
 
 ## Features
 
 - **JWT Authentication**: Secure authentication with token management.
 - **Role-Based Access Control**: Different roles with specific permissions.
-- **Media Upload**: Upload media to an S3 bucket.
+- **Media Upload**: Upload media to a S3 bucket.
 - **Voting System**: Upvote and downvote posts.
 - **Comment Threads**: Comment on posts and engage in discussions.
 - **Posts Views Tracking**: Track and analyze posts views.

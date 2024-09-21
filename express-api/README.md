@@ -2,13 +2,13 @@
 
 ## Overview
 
-This project is a blog API built with TypeScript. It includes a JWT authentication system with token management and a role-based authorization system. Users can upload media to an S3 bucket, upvote and downvote posts, comment on posts, and track posts views.
+This project is a blog API built with TypeScript. It includes a JWT authentication system with token management and a role-based authorization system. Users can upload media to a S3 bucket, upvote and downvote posts, comment on posts, and track posts views.
 
 ## Features
 
 - **JWT Authentication**: Secure authentication with token management.
 - **Role-Based Access Control**: Different roles with specific permissions.
-- **Media Upload**: Upload media to an S3 bucket.
+- **Media Upload**: Upload media to a S3 bucket.
 - **Voting System**: Upvote and downvote posts.
 - **Comment Threads**: Comment on posts and engage in discussions.
 - **Posts Views Tracking**: Track and analyze posts views.
@@ -46,7 +46,6 @@ This project is a blog API built with TypeScript. It includes a JWT authenticati
 - `AWS_REGION`: AWS region for S3.
 - `AWS_BUCKET_NAME`: AWS S3 bucket name.
 - `PORT`: Port for the server.
-
 
 ## Usage
 
@@ -122,4 +121,3 @@ If you want to contribute to the project, please fork the repository and submit 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
