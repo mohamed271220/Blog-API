@@ -5,14 +5,12 @@ import {
   DataType,
   HasMany,
   BelongsToMany,
-  ForeignKey,
-  BelongsTo,
 } from 'sequelize-typescript';
-import { Post } from './post.entity';
-import { Comment } from './comment.entity';
-import { Vote } from './vote.entity';
-import { PostView } from './post-view.entity';
-import { Role } from './role.entity';
+import { Post } from '../../post/entities/post.entity';
+import { Comment } from '../../comment/comment.entity';
+import { Vote } from '../../vote/vote.entity';
+import { PostView } from '../../post-views/post-view.entity';
+import { Role } from '../../role/role.entity';
 import { UserRole } from './user-role.entity';
 
 @Table({

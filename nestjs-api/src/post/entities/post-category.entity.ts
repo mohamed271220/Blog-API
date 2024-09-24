@@ -6,7 +6,7 @@ import {
   ForeignKey,
 } from 'sequelize-typescript';
 import { Post } from './post.entity';
-import { Category } from './category.entity';
+import { Category } from '../../category/category.entity';
 
 @Table({
   tableName: 'post_categories',

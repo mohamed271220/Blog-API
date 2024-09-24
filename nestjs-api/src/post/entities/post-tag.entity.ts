@@ -5,25 +5,25 @@ import {
   DataType,
   ForeignKey,
 } from 'sequelize-typescript';
-import { User } from './user.entity';
-import { Role } from './role.entity';
+import { Post } from './post.entity';
+import { Tag } from '../../tag/tag.entity';
 
 @Table({
-  tableName: 'user_roles',
+  tableName: 'post_tags',
   timestamps: false,
 })
-export class UserRole extends Model<UserRole> {
-  @ForeignKey(() => User)
+export class PostTag extends Model<PostTag> {
+  @ForeignKey(() => Post)
   @Column({
     type: DataType.UUID,
     allowNull: false,
   })
-  userId: string;
+  postId: string;
 
-  @ForeignKey(() => Role)
+  @ForeignKey(() => Tag)
   @Column({
     type: DataType.UUID,
     allowNull: false,
   })
-  roleId: string;
+  tagId: string;
 }

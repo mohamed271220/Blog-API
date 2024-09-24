@@ -7,8 +7,8 @@ import {
   BelongsTo,
   HasMany,
 } from 'sequelize-typescript';
-import { Post } from './post.entity';
-import { User } from './user.entity';
+import { Post } from '../post/entities/post.entity';
+import { User } from '../user/entities/user.entity';
 
 @Table({
   tableName: 'comments',
@@ -16,6 +16,7 @@ import { User } from './user.entity';
   paranoid: true,
 })
 export class Comment extends Model<Comment> {
+  @ForeignKey(() => Comment)
   @Column({
     type: DataType.UUID,
     primaryKey: true,

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { User } from '../user/user.entity';
+import { User } from '../user/entities/user.entity';
 import { Role } from '../role/role.entity';
-import { UserRole } from '../user-role/userRole.entity';
+import { UserRole } from '../user/entities/user-role.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';

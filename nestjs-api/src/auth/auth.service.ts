@@ -6,9 +6,9 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from '../user/user.entity';
+import { User } from '../user/entities/user.entity';
 import { Role } from '../role/role.entity';
-import { UserRole } from '../user-role/userRole.entity';
+import { UserRole } from '../user/entities/user-role.entity';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import {

@@ -6,8 +6,8 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { User } from './user.entity';
-import { Post } from './post.entity';
+import { User } from '../user/entities/user.entity';
+import { Post } from '../post/entities/post.entity';
 
 @Table({
   tableName: 'post_views',

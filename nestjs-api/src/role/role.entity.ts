@@ -5,8 +5,8 @@ import {
   DataType,
   BelongsToMany,
 } from 'sequelize-typescript';
-import { User } from './user.entity';
-import { UserRole } from './user-role.entity';
+import { User } from '../user/entities/user.entity';
+import { UserRole } from '../user/entities/user-role.entity';
 
 @Table({
   tableName: 'roles',

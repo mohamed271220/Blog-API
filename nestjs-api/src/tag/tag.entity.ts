@@ -5,8 +5,8 @@ import {
   DataType,
   BelongsToMany,
 } from 'sequelize-typescript';
-import { Post } from './post.entity';
-import { PostTag } from './post-tag.entity';
+import { Post } from '../post/entities/post.entity';
+import { PostTag } from '../post/entities/post-tag.entity';
 
 @Table({
   tableName: 'tags',

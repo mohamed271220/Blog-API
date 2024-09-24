@@ -6,8 +6,8 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { Post } from './post.entity';
-import { User } from './user.entity';
+import { Post } from '../post/entities/post.entity';
+import { User } from '../user/entities/user.entity';
 
 @Table({
   tableName: 'votes',

@@ -8,15 +8,15 @@ import {
   HasMany,
   BelongsToMany,
 } from 'sequelize-typescript';
-import { User } from './User.entity';
-import { Comment } from './Comment.entity';
-import { MediaLink } from './media-link.entity';
-import { Tag } from './tag.entity';
+import { User } from '../../user/entities/user.entity';
+import { Comment } from '../../comment/comment.entity';
+import { MediaLink } from '../../entities/media-link.entity';
+import { Tag } from '../../tag/tag.entity';
 import { PostTag } from './post-tag.entity';
-import { Category } from './Category.entity';
+import { Category } from '../../category/category.entity';
 import { PostCategory } from './post-category.entity';
-import { Vote } from './vote.entity';
-import { PostView } from './post-view.entity';
+import { Vote } from '../../vote/vote.entity';
+import { PostView } from '../../post-views/post-view.entity';
 
 @Table({
   tableName: 'posts',
@@ -36,6 +36,9 @@ export class Post extends Model<Post> {
     allowNull: false,
   })
   authorId: string;
+
+  @BelongsTo(() => User, { foreignKey: 'authorId', targetKey: 'id' })
+  author: User;
 
   @Column({
     type: DataType.STRING,
@@ -60,9 +63,6 @@ export class Post extends Model<Post> {
     defaultValue: DataType.NOW,
   })
   updatedAt?: Date;
-
-  @BelongsTo(() => User)
-  author: User;
 
   @HasMany(() => Comment)
   comments: Comment[];
