@@ -49,7 +49,7 @@ export const addNewRoleToUser = async (
 ) => {
   try {
     const userId = req.params.userId;
-    const roleId = req.body.roleId;
+    const roleId = req.params.roleId;
     await userService.addNewRoleToUser(userId, roleId);
     res.status(200).json({ message: "User role updated" });
   } catch (error) {

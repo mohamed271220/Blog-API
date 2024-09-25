@@ -1,4 +1,12 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  BelongsToMany,
+} from 'sequelize-typescript';
+import { PostCategory } from 'src/post/entities/post-category.entity';
+import { Post } from '../post/entities/post.entity';
 
 @Table({
   tableName: 'categories',
@@ -28,4 +36,7 @@ export class Category extends Model {
     defaultValue: DataType.NOW,
   })
   updatedAt?: Date;
+
+  @BelongsToMany(() => Post, () => PostCategory, 'categoryId', 'postId')
+  posts: Post[];
 }

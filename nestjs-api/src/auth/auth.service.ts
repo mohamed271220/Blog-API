@@ -56,7 +56,7 @@ export class AuthService {
 
       // Assign default role 'User'
       const userRole = await this.roleModel.findOne({
-        where: { name: 'User' },
+        where: { name: 'user' },
       });
       if (userRole) {
         await this.userRoleModel.create({
@@ -64,7 +64,7 @@ export class AuthService {
           roleId: userRole.id,
         });
       } else {
-        this.logger.warn('Default role "User" not found');
+        this.logger.warn('Default role "user" not found');
       }
     } catch (error) {
       this.logger.error('Failed to create user', error.stack);

@@ -25,7 +25,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('User', 'Admin') // Example roles
+  @Roles('user', 'admin')
   @Get('/logout')
   logOut(): Promise<void> {
     return this.authService.logOut();

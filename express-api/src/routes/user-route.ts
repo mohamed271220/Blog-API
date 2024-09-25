@@ -23,7 +23,7 @@ router.get(
 
 // add an user role by id
 router.post(
-  "/:userId/role",
+  "/:userId/assign-role/:roleId",
   authenticateToken,
   authorizeRoles("superadmin"),
   userController.addNewRoleToUser

@@ -8,15 +8,15 @@ import { TagModule } from './tag/tag.module';
 import { RoleModule } from './role/role.module';
 import { VoteModule } from './vote/vote.module';
 import { PostViewsModule } from './post-views/post-views.module';
-import { MediaModule } from './upload/upload.module';
+import { DmsModule } from './upload/dms.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
-import { User } from './user/entities/User.entity';
+import { User } from './user/entities/user.entity';
 import { Post } from './post/entities/post.entity';
 
 import { Category } from './category/category.entity';
 import { Comment } from './comment/comment.entity';
-import { MediaLink } from './entities/media-link.entity';
+import { MediaLink } from './post/entities/media-link.entity';
 import { PostCategory } from './post/entities/post-category.entity';
 import { PostTag } from './post/entities/post-tag.entity';
 import { PostView } from './post-views/post-view.entity';
@@ -24,11 +24,12 @@ import { Role } from './role/role.entity';
 import { UserRole } from './user/entities/user-role.entity';
 import { Vote } from './vote/vote.entity';
 import { Tag } from './tag/tag.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [`.env`],
+      envFilePath: [`.env.stage.${process.env.STAGE}`],
       validationSchema: configValidationSchema,
     }),
     SequelizeModule.forRootAsync({
@@ -71,6 +72,7 @@ import { Tag } from './tag/tag.entity';
       },
     }),
     AuthModule,
+    UserModule,
     PostModule,
     CommentModule,
     CategoryModule,
@@ -78,7 +80,7 @@ import { Tag } from './tag/tag.entity';
     RoleModule,
     VoteModule,
     PostViewsModule,
-    MediaModule,
+    DmsModule,
   ],
 })
 export class AppModule {}

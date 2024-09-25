@@ -3,14 +3,14 @@ import {
   Column,
   Model,
   DataType,
-  ForeignKey,
   BelongsTo,
   HasMany,
   BelongsToMany,
+  ForeignKey,
 } from 'sequelize-typescript';
 import { User } from '../../user/entities/user.entity';
 import { Comment } from '../../comment/comment.entity';
-import { MediaLink } from '../../entities/media-link.entity';
+import { MediaLink } from './media-link.entity';
 import { Tag } from '../../tag/tag.entity';
 import { PostTag } from './post-tag.entity';
 import { Category } from '../../category/category.entity';
@@ -37,9 +37,6 @@ export class Post extends Model<Post> {
   })
   authorId: string;
 
-  @BelongsTo(() => User, { foreignKey: 'authorId', targetKey: 'id' })
-  author: User;
-
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -63,6 +60,9 @@ export class Post extends Model<Post> {
     defaultValue: DataType.NOW,
   })
   updatedAt?: Date;
+
+  @BelongsTo(() => User)
+  author: User;
 
   @HasMany(() => Comment)
   comments: Comment[];

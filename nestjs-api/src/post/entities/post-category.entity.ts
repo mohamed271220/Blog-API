@@ -4,6 +4,7 @@ import {
   Model,
   DataType,
   ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { Post } from './post.entity';
 import { Category } from '../../category/category.entity';
@@ -26,4 +27,10 @@ export class PostCategory extends Model<PostCategory> {
     allowNull: false,
   })
   categoryId: string;
+
+  @BelongsTo(() => Post, 'postId')
+  post: Post;
+
+  @BelongsTo(() => Category, 'categoryId')
+  category: Category;
 }

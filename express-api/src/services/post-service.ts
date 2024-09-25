@@ -232,6 +232,10 @@ export class PostService {
   }
 
   async getPostsByAuthor(authorId: string, limit: number, offset: number) {
+    const author = await this.userRepository.findByPk(authorId);
+    if (!author) {
+      throw new CustomError("Author not found", 404);
+    }
     const { count, rows: posts } = await this.postRepository.findAndCountAll({
       limit,
       offset,
@@ -251,6 +255,10 @@ export class PostService {
   }
 
   async getPostsByCategory(categoryId: string, limit: number, offset: number) {
+    const category = await this.categoryRepository.findByPk(categoryId);
+    if (!category) {
+      throw new CustomError("Category not found", 404);
+    }
     const { count, rows: posts } =
       await this.postCategoryRepository.findAndCountAll({
         offset,
@@ -275,6 +283,10 @@ export class PostService {
   }
 
   async getPostsByTag(tagId: string, limit: number, offset: number) {
+    const tag = await this.tagRepository.findByPk(tagId);
+    if (!tag) {
+      throw new CustomError("Tag not found", 404);
+    }
     const { count, rows: posts } = await this.postTagRepository.findAndCountAll(
       {
         offset,
@@ -301,11 +313,11 @@ export class PostService {
   }
 
   async updatePost(
+    userId: string,
     postId: string,
     data: {
       title?: string;
       content?: string;
-      authorId: string;
       tags?: string[];
       categories?: string[];
       mediaLinks?: string[];
@@ -327,7 +339,7 @@ export class PostService {
       }
 
       // Check if the user is the author of the post
-      if (post.authorId !== data.authorId) {
+      if (post.authorId !== userId) {
         throw new CustomError("You are not authorized to edit this post", 403);
       }
 
@@ -417,7 +429,7 @@ export class PostService {
     }
   }
 
-  async deletePost(postId: string, authorId: string) {
+  async deletePost(postId: string, userId: string) {
     const transaction = await this.sequelize.transaction();
 
     try {
@@ -429,7 +441,7 @@ export class PostService {
       }
 
       // Check if the user is the author of the post
-      if (post.authorId !== authorId) {
+      if (post.authorId !== userId) {
         throw new CustomError(
           "You are not authorized to delete this post",
           403

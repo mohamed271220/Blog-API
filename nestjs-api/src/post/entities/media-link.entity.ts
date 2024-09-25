@@ -6,7 +6,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { Post } from '../post/entities/post.entity';
+import { Post } from './post.entity';
 
 @Table({
   tableName: 'media_links',

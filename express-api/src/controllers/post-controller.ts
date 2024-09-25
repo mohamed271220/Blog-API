@@ -161,10 +161,9 @@ export const updatePost = async (
     if (!req.user) {
       throw new CustomError("Unauthorized", 401);
     }
-    const post = await postService.updatePost(postId, {
+    const post = await postService.updatePost(req.user.id, postId, {
       title,
       content,
-      authorId: req.user.id,
       tags,
       categories,
       mediaLinks,
@@ -186,8 +185,8 @@ export const deletePost = async (
     if (!req.user) {
       throw new CustomError("Unauthorized", 401);
     }
-    const authorId = req.user.id;
-    await postService.deletePost(postId, authorId);
+    const userId = req.user.id;
+    await postService.deletePost(postId, userId);
     res.status(200).json({ message: "post deleted successfully" });
   } catch (error) {
     next(error);

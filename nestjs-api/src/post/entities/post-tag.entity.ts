@@ -4,6 +4,7 @@ import {
   Model,
   DataType,
   ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { Post } from './post.entity';
 import { Tag } from '../../tag/tag.entity';
@@ -26,4 +27,10 @@ export class PostTag extends Model<PostTag> {
     allowNull: false,
   })
   tagId: string;
+
+  @BelongsTo(() => Post, 'postId')
+  post: Post;
+
+  @BelongsTo(() => Tag, 'tagId')
+  tag: Tag;
 }

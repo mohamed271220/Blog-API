@@ -13,7 +13,7 @@ import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    ConfigModule,
+    ConfigModule.forRoot(),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -26,7 +26,7 @@ import { PassportModule } from '@nestjs/passport';
     }),
     SequelizeModule.forFeature([User, Role, UserRole]),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, ConfigService],
   controllers: [AuthController],
   exports: [JwtStrategy, AuthService],
 })

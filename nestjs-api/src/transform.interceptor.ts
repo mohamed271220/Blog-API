@@ -14,6 +14,14 @@ export class TransformInterceptor implements NestInterceptor {
     context: ExecutionContext,
     next: CallHandler<any>,
   ): Observable<any> {
-    return next.handle().pipe(map((data) => classToPlain(data)));
+    return next.handle().pipe(
+      map((data) => {
+        // Ensure data is not undefined
+        if (data) {
+          return classToPlain(data);
+        }
+        return data; // Return unchanged if data is undefined
+      }),
+    );
   }
 }
