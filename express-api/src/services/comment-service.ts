@@ -49,7 +49,7 @@ export class CommentService {
       where: { postId, parentId: null },
       include: [
         {
-          model: User,
+          model: this.userRepository,
           attributes: ["id", "username"],
         },
       ],

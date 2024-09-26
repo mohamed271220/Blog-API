@@ -19,6 +19,7 @@ export class Category extends Model {
     allowNull: false,
   })
   id: string;
+
   @Column({
     type: DataType.STRING,
     allowNull: false,
