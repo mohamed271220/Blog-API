@@ -25,7 +25,7 @@ const ThemeToggle = () => {
                 transition={{ type: 'spring', stiffness: 700, damping: 30 }}
             >
                 {mode === 'light' ? (
-                    <FaMoon className='text-gray-800' />
+                    <FaMoon className='text-gray-700' />
                 ) : (
                     <PiSunBold  className='text-gray-800' />
                 )}

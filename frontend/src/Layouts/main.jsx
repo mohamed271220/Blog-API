@@ -5,6 +5,7 @@ import { FaBars, FaTimes } from 'react-icons/fa'; // Importing icons
 import Sidebar from '../components/Sidebar';
 import ThemeToggle from '../components/ThemeToggle';
 import { motion } from 'framer-motion';
+import Footer from '../components/Footer';
 
 const Layout = () => {
     const mode = useSelector((state) => state.theme.mode);
@@ -42,6 +43,7 @@ const Layout = () => {
                     <Outlet />
                 </main>
             </div>
+            <Footer /> 
         </div>
     );
 };
