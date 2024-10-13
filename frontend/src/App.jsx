@@ -1,25 +1,10 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from './Layouts/main';
-import ProtectedRoute from './components/ProtectedRoute';
-import AuthPage from './pages/authPage';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
+import AuthPage from './pages/AuthPage';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './api';
-import { useSelector } from 'react-redux';
-
-function Home() {
-  const isAuthenticated = useSelector((state) => state.auth);
-  console.log(isAuthenticated);
-  
-  return <div className='w-full h-[100vh]'>
-    <h1 className="text-3xl font-bold">Hello, Tailwind CSS!</h1>
-  </div>
-}
-
-function ProtectedStuff() {
-  return <div className='w-full h-[100vh]'>
-    <h1 className="text-3xl font-bold">Protected stuff</h1>
-  </div>
-}
+import FeedPage from './pages/feedPage';
 
 
 const router = createBrowserRouter([
@@ -30,18 +15,12 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />
+        element: <FeedPage />
       },
       {
         path: '/auth',
         element: <AuthPage />
       },
-      {
-        path: '/protected',
-        element: <ProtectedRoute>
-          <ProtectedStuff />
-        </ProtectedRoute>
-      }
     ]
   }
 ])

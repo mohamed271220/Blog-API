@@ -1,9 +1,19 @@
-import { useState } from 'react';
-import Login from '../components/login';
-import Signup from '../components/Signup';
+import { useEffect, useState } from 'react';
+import Login from '../components/Auth/Login';
+import Signup from '../components/Auth/Signup';
+import { useNavigate } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const navigate = useNavigate();
+    const isAuthenticated = useAuth();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/');
+        }
+    }, [isAuthenticated, navigate]);
 
     const toggleAuthMode = () => {
         setIsLogin((prev) => !prev);
@@ -11,13 +21,10 @@ const AuthPage = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
-            <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
-                {isLogin ? 'Login' : 'Signup'}
-            </h1>
             {isLogin ? <Login /> : <Signup />}
             <button
                 onClick={toggleAuthMode}
-                className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="mt-4 p-2 text-blue-500 dark:text-blue-400 rounded underline hover:opacity-80"
             >
                 Switch to {isLogin ? 'Signup' : 'Login'}
             </button>

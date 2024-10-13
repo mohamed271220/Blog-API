@@ -121,11 +121,18 @@ export class PostService {
     limit: number,
     offset: number,
     querySearch: string
-  ): Promise<{ posts: Post[]; pagination: Pagination }> {
-    const { count, rows: posts } = await this.postRepository.findAndCountAll({
+  ): Promise<{
+    posts: (Post & { upvotes: number })[];
+    pagination: Pagination;
+  }> {
+    const count = await this.postRepository.count({
+      where: querySearch ? { title: { [Op.iLike]: `%${querySearch}%` } } : {},
+    });
+
+    const posts = await this.postRepository.findAll({
       limit,
       offset,
-      where: querySearch ? { title: { $iLike: `%${querySearch}%` } } : {},
+      where: querySearch ? { title: { [Op.iLike]: `%${querySearch}%` } } : {},
       include: [
         {
           model: this.userRepository,
@@ -136,8 +143,29 @@ export class PostService {
         { model: this.mediaLinkRepository },
       ],
     });
+
+    // get the number of upvotes for each post
+    const postIds = posts.map((post) => post.id);
+    const votes = await this.voteRepository.findAll({
+      where: { postId: { [Op.in]: postIds }, type: "upvote" },
+      attributes: ["postId", [Sequelize.fn("COUNT", "postId"), "upvotes"]],
+      group: ["postId"],
+    });
+
+    // Create a map of postId to upvotes
+    const voteMap = votes.reduce((acc, vote) => {
+      acc[vote.postId] = vote.get("upvotes") as number;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Add the upvotes to the posts
+    const postsWithVotes = posts.map((post) => {
+      const upvotes = voteMap[post.id] ?? 0;
+      return { ...post.toJSON(), upvotes } as Post & { upvotes: number };
+    });
+
     const pagination = getPagination(count, limit, offset);
-    return { posts, pagination };
+    return { posts: postsWithVotes, pagination };
   }
 
   async getFeed(userId: string, limit: number, offset: number) {
@@ -172,8 +200,21 @@ export class PostService {
     const tagIds = tags.map((tag) => tag.tagId);
     const categoryIds = categories.map((category) => category.categoryId);
 
+    // Perform a count query without the include option
+    const count = await this.postRepository.count({
+      where: {
+        [Op.or]: [
+          { id: { [Op.in]: postIds } },
+          tagIds.length > 0 ? { "$PostTags.tagId$": { [Op.in]: tagIds } } : {},
+          categoryIds.length > 0
+            ? { "$PostCategories.categoryId$": { [Op.in]: categoryIds } }
+            : {},
+        ],
+      },
+    });
+
     // Fetch posts that match the user's interacted tags and categories
-    const { count, rows: posts } = await this.postRepository.findAndCountAll({
+    const posts = await this.postRepository.findAll({
       limit,
       offset,
       where: {
@@ -202,7 +243,7 @@ export class PostService {
           model: this.mediaLinkRepository,
         },
       ],
-      distinct: true, // Avoid duplicate posts
+      // distinct: true, // Avoid duplicate posts
     });
 
     // Handle pagination

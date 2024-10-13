@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { logout } from '../features/authSlice';
+import { logout } from '../../features/authSlice';
+import Button from './Button';
 
 const Logout = () => {
     const dispatch = useDispatch();
@@ -8,7 +9,7 @@ const Logout = () => {
     const handleLogout = async () => {
         try {
             const response = await axios.get('/api/v1/auth/logout');
-            if (response.data.success) {
+            if (response.status === 200) {
                 dispatch(logout());
             }
         } catch (error) {
@@ -17,9 +18,9 @@ const Logout = () => {
     };
 
     return (
-        <button onClick={handleLogout} className="p-2 text-xl dark:text-white rounded flex items-center">
+        <Button onClick={handleLogout} color='gray'>
             Logout
-        </button>
+        </Button>
     );
 };
 

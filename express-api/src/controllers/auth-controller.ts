@@ -78,9 +78,12 @@ export const signup = async (
       maxAge: 604800000, // 1 week
     });
 
-    res
-      .status(201)
-      .json({ message: "User created successfully", userId: savedUser.id });
+    res.status(201).json({
+      message: "User created successfully",
+      userId: savedUser.id,
+      username: savedUser.username,
+      roles: [role.name],
+    });
   } catch (error) {
     console.log(error);
     next(error);
@@ -138,7 +141,12 @@ export const login = async (
       maxAge: 604800000, // 1 week
     });
 
-    res.status(200).json({ message: "Login successful", userId: user.id });
+    res.status(200).json({
+      message: "Login successful",
+      user: user.id,
+      username: user.username,
+      roles: roles.map((role) => role.name),
+    });
   } catch (error) {
     console.log(error);
     next(error);

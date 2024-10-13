@@ -21,20 +21,27 @@ export class UserService {
           ],
         }
       : {};
-    const { count, rows: users } =
-      await this.userRoleRepository.findAndCountAll({
-        limit,
-        offset,
-        where: whereClause,
-        include: [
-          {
-            model: this.userRepository,
-            attributes: { exclude: ["password"] },
-          },
-          { model: this.roleRepository },
-        ],
-      });
 
+    // Perform a count query without the include option
+    const count = await this.userRoleRepository.count({
+      where: whereClause,
+    });
+
+    // Perform the findAll query with the include option
+    const users = await this.userRoleRepository.findAll({
+      limit,
+      offset,
+      where: whereClause,
+      include: [
+        {
+          model: this.userRepository,
+          attributes: { exclude: ["password"] },
+        },
+        { model: this.roleRepository },
+      ],
+    });
+
+    // Handle pagination
     const pagination = getPagination(count, limit, offset);
     return { users, pagination };
   }

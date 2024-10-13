@@ -1,6 +1,6 @@
 import { FaMoon } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleTheme } from '../features/themeSlice';
+import { toggleTheme } from '../../features/themeSlice';
 import { motion } from 'framer-motion';
 import { PiSunBold } from "react-icons/pi";
 
@@ -27,7 +27,7 @@ const ThemeToggle = () => {
                 {mode === 'light' ? (
                     <FaMoon className='text-gray-700' />
                 ) : (
-                    <PiSunBold  className='text-gray-800' />
+                    <PiSunBold className='text-gray-800' />
                 )}
             </motion.div>
         </motion.button>
