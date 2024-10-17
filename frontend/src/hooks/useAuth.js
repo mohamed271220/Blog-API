@@ -5,9 +5,5 @@ const useAuth = () => {
     return isAuthenticated;
 };
 
-export const useUser = () => {
-    const { user } = useSelector((state) => state.auth);
-    return user;
-};
 
 export default useAuth;

@@ -35,7 +35,7 @@ export class CommentService {
       content,
       parentId,
     });
-    return comment;
+    return { ...comment.toJSON(), author: user.username };
   }
 
   async getTopLevelComments(postId: string) {
@@ -64,6 +64,10 @@ export class CommentService {
     }
     const allComments = await this.commentRepository.findAll({
       where: { postId },
+      include: {
+        model: this.userRepository,
+        attributes: ["id", "username"],
+      },
     });
 
     const buildTree = (
@@ -76,6 +80,7 @@ export class CommentService {
           id: comment.id,
           postId: comment.postId,
           authorId: comment.authorId,
+          author: comment.User?.username,
           content: comment.content,
           deletedAt: comment.deletedAt,
           parentId: comment.parentId,
@@ -127,6 +132,10 @@ export class CommentService {
     const allComments = await this.commentRepository.findAll({
       where: { postId },
       paranoid: false,
+      include: {
+        model: this.userRepository,
+        attributes: ["id", "username"],
+      },
     });
 
     const buildTree = (
@@ -139,6 +148,7 @@ export class CommentService {
           id: comment.id,
           postId: comment.postId,
           authorId: comment.authorId,
+          author: comment.User?.username,
           content: comment.content,
           deletedAt: comment.deletedAt,
           parentId: comment.parentId,

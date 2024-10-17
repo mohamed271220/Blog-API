@@ -33,4 +33,12 @@ export const fetchPosts = async ({ signal, page = 1, searchQuery = '', limit = 1
     return response.data;
 };
 
+export const fetchPost = async ({ signal, id }) => {
+    const response = await api.get(`/posts/${id}`, { signal });
+    return response.data;
+};
 
+export const fetchComments = async ({ signal, id }) => {
+    const response = await api.get(`/comments/post/${id}/tree`, { signal });
+    return response.data;
+}

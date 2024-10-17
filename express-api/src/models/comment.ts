@@ -10,6 +10,7 @@ class Comment extends Model<
   InferAttributes<Comment>,
   InferCreationAttributes<Comment>
 > {
+  [x: string]: any;
   declare id: string;
   declare parentId: string | null;
   declare postId: string;

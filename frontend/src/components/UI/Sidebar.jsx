@@ -1,5 +1,6 @@
 import { FaHome, FaInfoCircle, FaEnvelope, FaUserCircle } from 'react-icons/fa'; // Importing icons
-import useAuth, { useUser } from '../../hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
+import useUser from '../../hooks/useUser';
 
 const Sidebar = ({ isOpen }) => {
     const isAuthenticated = useAuth();
@@ -19,17 +20,17 @@ const Sidebar = ({ isOpen }) => {
             </div>
             <nav>
                 <ul>
-                    <li className="flex items-center mb-4 hover:bg-gray-600 bg-opacity-45 p-2 rounded">
+                    <li className="flex items-center mb-4 hover:bg-gray-300 dark:hover:bg-gray-700 bg-opacity-45 p-2 rounded">
                         <FaHome className="mr-3" />
                         <a href="#home" className="text-lg">Home</a>
                     </li>
                     {isAuthenticated && (
-                        <li className="flex items-center mb-4 hover:bg-gray-600 bg-opacity-45 p-2 rounded">
+                        <li className="flex items-center mb-4 hover:bg-gray-300 dark:hover:bg-gray-700 bg-opacity-45 p-2 rounded">
                             <FaInfoCircle className="mr-3" />
                             <a href="#about" className="text-lg">Recommended</a>
                         </li>
                     )}
-                    <li className="flex items-center mb-4 hover:bg-gray-600 bg-opacity-45 p-2 rounded">
+                    <li className="flex items-center mb-4 hover:bg-gray-300 dark:hover:bg-gray-700 bg-opacity-45 p-2 rounded">
                         <FaEnvelope className="mr-3" />
                         <a href="#contact" className="text-lg">Contact</a>
                     </li>

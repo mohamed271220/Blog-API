@@ -1,10 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
-import PostCard from '../components/Post/PostCard';
+import PostCard from '../components/Post/PostCard.jsx';
 import Pagination from '../components/utilities/Pagination.jsx';
 import Search from '../components/utilities/Search';
 import { fetchPosts } from '../api/index.jsx';
+import SkeletonLoader from '../components/Loading/LoadingSkeletons.jsx';
 
 const FeedPage = () => {
     const location = useLocation();
@@ -40,7 +41,7 @@ const FeedPage = () => {
         navigate(`?search=${query}`);
     };
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <SkeletonLoader mode="mainPosts" />;
     if (isError) return <div>Error fetching posts: {error.message}</div>;
 
     return (
