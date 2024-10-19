@@ -4,8 +4,10 @@ import ProtectedRoute from './components/Auth/ProtectedRoute';
 import AuthPage from './pages/AuthPage';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './api';
-import FeedPage from './pages/feedPage';
+import FeedPage from './pages/FeedPage';
 import Post from './pages/postPage';
+import CategoryPage from './pages/CategoriesPage';
+import TagsPage from './pages/TagsPage';
 
 
 const router = createBrowserRouter([
@@ -26,7 +28,14 @@ const router = createBrowserRouter([
         path: '/auth',
         element: <AuthPage />
       },
-    ]
+      {
+        path: '/categories',
+        element: <CategoryPage />
+      },
+      {
+        path: '/tags',
+        element: <TagsPage />
+      }]
   }
 ])
 

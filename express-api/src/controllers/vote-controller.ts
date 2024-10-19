@@ -17,7 +17,7 @@ export const createVote = async (
     const { postId } = req.params;
     const userId = req.user.id;
     const { type } = req.body;
-    if (!type || type !== "upvote" && type !== "downvote") {
+    if (!type || (type !== "upvote" && type !== "downvote")) {
       throw new CustomError("type is required", 400);
     }
     const vote = await voteService.createVote(postId, userId, type);
@@ -75,6 +75,24 @@ export const getVotesByUserId = async (
     const userId = req.user.id;
     const { votes } = await voteService.getVotesByUserId(userId);
     res.status(200).json({ message: "fetched votes successfully", votes });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getVoteForUserByPostId = async (
+  req: userRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.user) {
+      throw new CustomError("User not found");
+    }
+    const userId = req.user.id;
+    const { postId } = req.params;
+    const  vote  = await voteService.getVoteForUserByPostId(userId, postId);
+    res.status(200).json({ message: "fetched vote successfully", vote });
   } catch (error) {
     next(error);
   }

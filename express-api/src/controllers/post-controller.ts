@@ -35,11 +35,11 @@ export const getAllPosts = async (
   next: NextFunction
 ) => {
   try {
-    const { limit, offset, search } = req.query;
+    const { limit, offset, search, tagId, categoryId } = req.query;
     const { posts, pagination } = await postService.getAllPosts(
       limit ? parseInt(limit as string) : 10,
       offset ? parseInt(offset as string) : 0,
-      search ? (search as string) : ""
+      search ? (search as string) : "",
     );
     res
       .status(200)

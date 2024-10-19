@@ -8,6 +8,7 @@ import {
   getVotesByUserId,
   getVotesByCategoryId,
   getVotesByTagId,
+  getVoteForUserByPostId,
 } from "../controllers/vote-controller";
 
 // /api/v1/votes
@@ -41,6 +42,14 @@ router.get(
   authenticateToken,
   authorizeRoles("user"),
   getVotesByUserId
+);
+
+// get vote by postId for a user
+router.get(
+  "/post/:postId/user",
+  authenticateToken,
+  authorizeRoles("user"),
+  getVoteForUserByPostId
 );
 
 // Get Votes by category

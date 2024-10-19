@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import PostContent from '../components/Post/PostContent';
 import MediaSlider from '../components/Post/MediaSlider';
 import PostActions from '../components/Post/PostActions';
@@ -32,7 +31,7 @@ const Post = () => {
     }),
   });
 
-  const { data: comments, isLoading: commentsLoading, isError: isCommentsError, error: commentsError } = useQuery({
+  const { data: comments, isLoading: commentsLoading, isError: isCommentsError } = useQuery({
     queryKey: ['comments', id],
     queryFn: ({ signal }) => fetchComments({
       signal,
@@ -50,6 +49,11 @@ const Post = () => {
     </>;
   }
 
+  if (isError) {
+    return <div>Error fetching post: {error.message}</div>;
+  }
+
+
   return (
     <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 w-full mb-4 flex flex-col relative h-auto overflow-hidden">
       <PostContent
@@ -65,17 +69,20 @@ const Post = () => {
 
       <PostActions
         isPostPage={true}
-        voteCount={post.voteCount || 0}
+        initialVoteCount={post.voteCount || 0}
       />
 
-<CategoriesList categories={post.Categories} />
-<TagsList tags={post.Tags} />
+      <CategoriesList categories={post.Categories} />
+      <TagsList tags={post.Tags} />
 
       <div className="mt-4">
         <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Comments</h3>
         <div className=" rounded-lg p-4 mt-2">
           {
             commentsLoading ? <SkeletonLoader mode="comments" /> : <CommentsList postId={id} comments={comments.commentTree} />
+          }
+          {
+            isCommentsError && <div>Error fetching comments.</div>
           }
         </div>
       </div>

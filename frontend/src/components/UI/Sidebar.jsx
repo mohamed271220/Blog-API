@@ -1,10 +1,19 @@
-import { FaHome, FaInfoCircle, FaEnvelope, FaUserCircle } from 'react-icons/fa'; // Importing icons
+import { FaHome, FaInfoCircle, FaEnvelope, FaUserCircle, FaCalendar } from 'react-icons/fa'; // Importing icons
 import useAuth from '../../hooks/useAuth';
 import useUser from '../../hooks/useUser';
+import { NavLink } from 'react-router-dom';
 
 const Sidebar = ({ isOpen }) => {
     const isAuthenticated = useAuth();
     const user = useUser();
+
+    const navItems = [
+        { to: '/', label: 'Home', icon: FaHome, authRequired: false },
+        { to: '#about', label: 'Recommended', icon: FaInfoCircle, authRequired: true },
+        { to: '#contact', label: 'Contact', icon: FaEnvelope, authRequired: false },
+        { to: '/categories', label: 'Categories', icon: FaCalendar, authRequired: false },
+        { to: '/tags', label: 'Tags', icon: FaCalendar, authRequired: false },
+    ];
 
     return (
         <aside
@@ -20,20 +29,22 @@ const Sidebar = ({ isOpen }) => {
             </div>
             <nav>
                 <ul>
-                    <li className="flex items-center mb-4 hover:bg-gray-300 dark:hover:bg-gray-700 bg-opacity-45 p-2 rounded">
-                        <FaHome className="mr-3" />
-                        <a href="#home" className="text-lg">Home</a>
-                    </li>
-                    {isAuthenticated && (
-                        <li className="flex items-center mb-4 hover:bg-gray-300 dark:hover:bg-gray-700 bg-opacity-45 p-2 rounded">
-                            <FaInfoCircle className="mr-3" />
-                            <a href="#about" className="text-lg">Recommended</a>
-                        </li>
-                    )}
-                    <li className="flex items-center mb-4 hover:bg-gray-300 dark:hover:bg-gray-700 bg-opacity-45 p-2 rounded">
-                        <FaEnvelope className="mr-3" />
-                        <a href="#contact" className="text-lg">Contact</a>
-                    </li>
+                    {navItems.map((item, index) => {
+                        if (item.authRequired && !isAuthenticated) return null;
+                        return (
+                            <NavLink
+                                key={index}
+                                to={item.to}
+                                className="flex items-center mb-4 hover:bg-gray-300 dark:hover:bg-gray-700 bg-opacity-45 p-2 rounded"
+                                activeClassName="bg-blue-500 text-white"
+                            >
+                                <li className="flex items-center w-full">
+                                    <item.icon className="mr-3" />
+                                    <span className="text-lg">{item.label}</span>
+                                </li>
+                            </NavLink>
+                        );
+                    })}
                 </ul>
             </nav>
         </aside>

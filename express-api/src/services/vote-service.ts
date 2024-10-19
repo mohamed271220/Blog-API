@@ -25,35 +25,36 @@ export class VoteService {
     type: string
   ): Promise<Vote> {
     const [post, user, existingVote] = await Promise.all([
-      this.userRepository.findByPk(userId),
       this.postRepository.findByPk(postId),
+      this.userRepository.findByPk(userId),
       this.voteRepository.findOne({ where: { postId, userId } }),
     ]);
+
     if (!post || !user) {
       throw new CustomError("Post or User not found", 404);
     }
 
     if (existingVote) {
       await this.voteRepository.update({ type }, { where: { postId, userId } });
-
-      const vote = await this.voteRepository.findOne({
+      const updatedVote = await this.voteRepository.findOne({
         where: { postId, userId },
       });
 
-      if (!vote) {
-        throw new CustomError("Vote not found", 404);
+      if (!updatedVote) {
+        throw new CustomError("Vote not found after update", 404);
       }
 
-      return vote;
+      return updatedVote;
     }
 
-    const vote = await this.voteRepository.create({
+    const newVote = await this.voteRepository.create({
       id: uuid(),
       postId,
       userId,
       type,
     });
-    return vote;
+
+    return newVote;
   }
 
   async deleteVote(voteId: string): Promise<void> {
@@ -105,6 +106,19 @@ export class VoteService {
       throw new CustomError("Votes not found", 404);
     }
     return { votes };
+  }
+
+  async getVoteForUserByPostId(
+    userId: string,
+    postId: string
+  ): Promise<Vote | null> {
+    const vote = await this.voteRepository.findOne({
+      where: { userId, postId },
+    });
+    if (!vote) {
+      throw new CustomError("Vote not found", 404);
+    }
+    return vote;
   }
 
   async getVotesByCategoryId(categoryId: string): Promise<{ votes: Vote[] }> {

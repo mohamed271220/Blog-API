@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PostCard from '../components/Post/PostCard.jsx';
 import Pagination from '../components/utilities/Pagination.jsx';
-import Search from '../components/utilities/Search';
+import Search from '../components/utilities/Search.jsx';
 import { fetchPosts } from '../api/index.jsx';
 import SkeletonLoader from '../components/Loading/LoadingSkeletons.jsx';
 

@@ -42,3 +42,37 @@ export const fetchComments = async ({ signal, id }) => {
     const response = await api.get(`/comments/post/${id}/tree`, { signal });
     return response.data;
 }
+
+export const fetchCategories = async () => {
+    const response = await api.get('/categories');
+    return response.data;
+};
+
+export const fetchPostsByCategory = async ({ signal, selectedCategory, page = 1, limit = 10 }) => {
+    const offset = (page - 1) * limit;
+    const response = await api.get(`/posts/category/${selectedCategory}`, {
+        signal,
+        params: {
+            offset,
+            limit,
+        },
+    });
+    return response.data;
+};
+
+export const fetchTags = async () => {
+    const response = await api.get('/tags');
+    return response.data;
+};
+
+export const fetchPostsByTag = async ({ signal, selectedTag, page = 1, limit = 10 }) => {
+    const offset = (page - 1) * limit;
+    const response = await api.get(`/posts/tag/${selectedTag}`, {
+        signal,
+        params: {
+            offset,
+            limit,
+        },
+    });
+    return response.data;
+};

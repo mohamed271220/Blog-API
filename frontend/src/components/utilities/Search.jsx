@@ -14,7 +14,7 @@ const Search = ({ searchRef, onSearch }) => {
                 placeholder="Search posts..."
                 ref={searchRef}
                 onKeyPress={handleKeyPress}
-                className="border border-gray-300 rounded-lg p-2 w-full pr-10"
+                className="border text-black border-gray-300 rounded-lg p-2 w-full pr-10"
             />
             <button
                 onClick={onSearch}

@@ -125,14 +125,20 @@ export class PostService {
     posts: (Post & { upvotes: number })[];
     pagination: Pagination;
   }> {
+    const whereClause: any = {};
+
+    if (querySearch) {
+      whereClause.title = { [Op.iLike]: `%${querySearch}%` };
+    }
+
     const count = await this.postRepository.count({
-      where: querySearch ? { title: { [Op.iLike]: `%${querySearch}%` } } : {},
+      where: whereClause,
     });
 
     const posts = await this.postRepository.findAll({
       limit,
       offset,
-      where: querySearch ? { title: { [Op.iLike]: `%${querySearch}%` } } : {},
+      where: whereClause,
       include: [
         {
           model: this.userRepository,
@@ -300,25 +306,32 @@ export class PostService {
     if (!category) {
       throw new CustomError("Category not found", 404);
     }
-    const { count, rows: posts } =
-      await this.postCategoryRepository.findAndCountAll({
-        offset,
-        limit,
-        where: { categoryId },
-        include: [
-          {
-            model: this.postRepository,
-            include: [
-              {
-                model: this.userRepository,
-                attributes: ["id", "email", "username"],
-              },
-              { model: this.tagRepository },
-              { model: this.mediaLinkRepository },
-            ],
-          },
-        ],
-      });
+
+    // Perform a count query without the include option
+    const count = await this.postCategoryRepository.count({
+      where: { categoryId },
+    });
+
+    // Perform the findAll query with the include option
+    const posts = await this.postCategoryRepository.findAll({
+      offset,
+      limit,
+      where: { categoryId },
+      include: [
+        {
+          model: this.postRepository,
+          include: [
+            {
+              model: this.userRepository,
+              attributes: ["id", "email", "username"],
+            },
+            { model: this.tagRepository },
+            { model: this.mediaLinkRepository },
+          ],
+        },
+      ],
+    });
+
     const pagination = getPagination(count, limit, offset);
     return { posts, pagination };
   }
@@ -328,27 +341,33 @@ export class PostService {
     if (!tag) {
       throw new CustomError("Tag not found", 404);
     }
-    const { count, rows: posts } = await this.postTagRepository.findAndCountAll(
-      {
-        offset,
-        limit,
-        where: { tagId },
-        include: [
-          {
-            model: this.postRepository,
-            include: [
-              {
-                model: this.userRepository,
-                attributes: ["id", "email", "username"],
-              },
-              { model: this.tagRepository },
-              { model: this.categoryRepository },
-              { model: this.mediaLinkRepository },
-            ],
-          },
-        ],
-      }
-    );
+
+    // Perform a count query without the include option
+    const count = await this.postTagRepository.count({
+      where: { tagId },
+    });
+
+    // Perform the findAll query with the include option
+    const posts = await this.postTagRepository.findAll({
+      offset,
+      limit,
+      where: { tagId },
+      include: [
+        {
+          model: this.postRepository,
+          include: [
+            {
+              model: this.userRepository,
+              attributes: ["id", "email", "username"],
+            },
+            { model: this.tagRepository },
+            { model: this.categoryRepository },
+            { model: this.mediaLinkRepository },
+          ],
+        },
+      ],
+    });
+
     const pagination = getPagination(count, limit, offset);
     return { posts, pagination };
   }

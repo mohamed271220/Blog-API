@@ -1,6 +1,4 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { FaRegThumbsUp, FaRegComment } from 'react-icons/fa';
 
 const SkeletonLoader = ({ mode }) => {
     const postSkeleton = (
@@ -54,10 +52,23 @@ const SkeletonLoader = ({ mode }) => {
         </motion.div>
     );
 
+    const dropdownSkeleton = (
+        <motion.div
+            className="bg-gray-100 dark:bg-gray-700 p-2 mb-2 rounded-lg shadow-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+        >
+            <div className="bg-gray-300 dark:bg-gray-600 h-4 mb-2 rounded w-3/4"></div>
+        </motion.div>
+    );
+
     const skeletons = {
         mainPosts: Array(8).fill(postSkeleton),
         singlePost: [singlePostSkeleton],
         comments: Array(5).fill(commentSkeleton),
+        dropdown: [dropdownSkeleton],
         spinner: (
             <motion.div
                 className="w-16 h-16 border-4 border-gray-300 dark:border-gray-700 border-t-blue-500 dark:border-t-blue-400 border-solid rounded-full animate-spin mx-auto mt-4"

@@ -17,3 +17,24 @@ aside {
 main {
   @apply ml-64 p-4 bg-white dark:bg-gray-900 text-black dark:text-white;
 }
+.container {
+  max-width: 1200px; /* Adjust this based on your layout */
+  margin: 0 auto;
+  padding: 0 16px; /* Add padding for spacing */
+}
+
+.overflow-hidden {
+  overflow: hidden; /* Ensure no overflow happens */
+}
+
+.flex {
+  display: flex; /* Flexbox for layout */
+}
+
+.flex-col {
+  flex-direction: column; /* Vertical layout */
+}
+
+.w-full {
+  width: 100%; /* Full width for the slider */
+}
